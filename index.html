@@ -349,6 +349,10 @@
         <div class="join-card">
             <form id="waitlist-form">
                 <div class="form-group">
+                    <iconify-icon icon="lucide:user"></iconify-icon>
+                    <input type="text" id="name" required autocomplete="name">
+                </div>
+                <div class="form-group">
                     <iconify-icon icon="lucide:mail"></iconify-icon>
                     <input type="email" id="email" required autocomplete="email">
                 </div>
@@ -369,6 +373,7 @@
                 flag: "emojione:flag-for-portugal",
                 langName: "PT",
                 subtitle: "LISTA DE ESPERA ... ",
+                name: "Primeiro e último nome",
                 email: "Insere o teu principal email",
                 phone: "Insere o teu principal telemovel",
                 btn: "JUNTA-TE A NÓS",
@@ -379,6 +384,7 @@
                 flag: "emojione:flag-for-united-kingdom",
                 langName: "EN",
                 subtitle: "WAITING LIST ... ",
+                name: "First and last name",
                 email: "Enter your primary email",
                 phone: "Enter your primary phone number",
                 btn: "JOIN US",
@@ -396,6 +402,7 @@
             document.getElementById('flag-icon').setAttribute('icon', data.flag);
             document.getElementById('lang-text').innerText = data.langName;
             document.getElementById('email').placeholder = data.email;
+            document.getElementById('name').placeholder = data.name;
             document.getElementById('phone').placeholder = data.phone;
             document.getElementById('submit-btn').innerText = data.btn;
 

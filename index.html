@@ -484,18 +484,53 @@
             }
         }
 
-        document.getElementById('waitlist-form').addEventListener('submit', function (e) {
+        document.getElementById('waitlist-form').addEventListener('submit', async function (e) {
             e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
             const btn = document.getElementById('submit-btn');
             const originalText = btn.innerText;
-            btn.innerText = i18n[currentLang].done;
-            btn.style.background = '#22C55E';
-            setTimeout(() => {
-                alert(i18n[currentLang].success);
+
+            if (!name || !email || !phone) {
+                alert(i18n[currentLang].success.replace('Success!', 'Por favor, preencha todos os campos.'));
+                return;
+            }
+
+            try {
+                btn.innerText = i18n[currentLang].done;
+                btn.disabled = true;
+                btn.style.background = '#22C55E';
+
+                const response = await fetch('https://contact-api.lino-022.workers.dev/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        message: phone
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(i18n[currentLang].success);
+                    this.reset();
+                } else {
+                    alert('Erro: ' + (result.error || 'Não foi possível enviar.'));
+                }
+            } catch (err) {
+                console.error('Erro de rede:', err);
+                alert('Erro de conexão. Verifique a internet.');
+            } finally {
                 btn.innerText = originalText;
+                btn.disabled = false;
                 btn.style.background = '';
-                this.reset();
-            }, 1000);
+            }
         });
 
         updateLang();

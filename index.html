@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE FITNESS PROJECT | Waiting List</title>
+    <!-- Exo 2 and Manrope Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,700;1,800&family=Manrope:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        :root {
+            /* Branding Tokens */
+            --bg: #0F172A;
+            --bg-rgb: 15, 23, 42;
+            --text: #F1F5F9;
+            --text-rgb: 241, 245, 249;
+            --accent-cyan: #00D9FF;
+            --accent-cyan-rgb: 0, 217, 255;
+            --accent-yellow: #FFD60A;
+            --accent-yellow-rgb: 255, 214, 10;
+            --gradient-start: #0ea5e9;
+            /* Sky Blue */
+            --gradient-end: #f59e0b;
+            /* Orange Yellow */
+            --font-display: 'Exo 2', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            --border: rgba(255, 255, 255, 0.1);
+            --surface: rgba(15, 23, 42, 0.75);
+            --on-accent: #0F172A;
+            --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #F8FAFC;
+            --bg-rgb: 248, 250, 252;
+            --text: #0B1220;
+            --text-rgb: 11, 18, 32;
+            --border: rgba(0, 0, 0, 0.08);
+            --surface: rgba(255, 255, 255, 0.55);
+            /* More translucent */
+            --on-accent: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color var(--transition), color var(--transition);
+        }
+
+        /* HD Background System */
+        .bg-system {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .bg-layer {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 10s linear;
+            /* Faster fade (0.5s) */
+            transform: scale(1.1);
+        }
+
+        .bg-layer.active {
+            opacity: 0.35;
+            transform: scale(1);
+        }
+
+        [data-theme="light"] .bg-layer.active {
+            opacity: 0.25;
+            /* Higher visibility for Light Mode background */
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 10% 10%, rgba(14, 165, 233, 0.12), transparent 45%),
+                radial-gradient(circle at 85% 25%, rgba(245, 158, 11, 0.08), transparent 45%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Layout */
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 1.5rem;
+            position: relative;
+        }
+
+        /* Top Controls */
+        .top-controls {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.75rem;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            color: var(--text);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-btn:hover {
+            background: rgba(var(--text-rgb), 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Content */
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 10vw, 4.5rem);
+            font-weight: 800;
+            font-style: italic;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.15));
+            text-transform: uppercase;
+        }
+
+        .subtitle-container {
+            height: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .subtitle {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: clamp(0.9rem, 3vw, 1.25rem);
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            white-space: pre-wrap;
+            display: inline-block;
+            border-right: 2px solid var(--gradient-start);
+            padding-right: 2px;
+        }
+
+        /* Dynamic Form Card */
+        .join-card {
+            background: var(--surface);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 1.75rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 0.85rem;
+        }
+
+        .form-group iconify-icon {
+            position: absolute;
+            left: 1.1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: var(--text);
+            opacity: 0.4;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(var(--text-rgb), 0.04);
+            border: 1px solid var(--border);
+            padding: 1rem 1rem 1rem 3.2rem;
+            border-radius: 0.85rem;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            background: rgba(var(--text-rgb), 0.08);
+            border-color: var(--gradient-start);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.85rem;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-style: italic;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 0.75rem;
+            text-transform: uppercase;
+            box-shadow: 0 8px 15px -5px rgba(14, 165, 233, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.01);
+            filter: brightness(1.1);
+        }
+
+        /* Footer */
+        .footer-note {
+            margin-top: 4rem;
+            font-size: 0.7rem;
+            opacity: 0.35;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .page-wrapper {
+                padding-top: 8rem;
+            }
+
+            .top-controls {
+                top: 1rem;
+                right: 1rem;
+                gap: 0.5rem;
+            }
+
+            .control-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
+                border-radius: 10px;
+            }
+
+            h1 {
+                font-size: 2.25rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .subtitle-container {
+                margin-bottom: 2.5rem;
+            }
+
+            .join-card {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+            }
+
+            input {
+                padding: 0.85rem 0.85rem 0.85rem 3rem;
+                font-size: 0.85rem;
+            }
+
+            .submit-btn {
+                padding: 0.85rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-system" id="bg-system"></div>
+    <div class="bg-overlay"></div>
+
+    <div class="top-controls">
+        <button class="control-btn" onclick="toggleLang()" id="lang-btn">
+            <iconify-icon icon="emojione:flag-for-portugal" id="flag-icon"></iconify-icon>
+            <span id="lang-text">PT</span>
+        </button>
+        <button class="control-btn" onclick="toggleTheme()" aria-label="Toggle Theme">
+            <iconify-icon icon="lucide:moon" id="theme-icon" style="font-size: 16px;"></iconify-icon>
+        </button>
+    </div>
+
+    <main class="page-wrapper">
+        <h1 id="main-title">THE FITNESS PROJECT</h1>
+        <div class="subtitle-container">
+            <p class="subtitle" id="subtitle-text"></p>
+        </div>
+
+        <div class="join-card">
+            <form id="waitlist-form">
+                <div class="form-group">
+                    <iconify-icon icon="lucide:mail"></iconify-icon>
+                    <input type="email" id="email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <iconify-icon icon="lucide:phone"></iconify-icon>
+                    <input type="tel" id="phone" required autocomplete="tel">
+                </div>
+                <button type="submit" class="submit-btn" id="submit-btn">JUNTA-TE A NÓS</button>
+            </form>
+        </div>
+
+        <div class="footer-note" id="footer-text">© 2026 THE FITNESS PROJECT</div>
+    </main>
+
+    <script>
+        const i18n = {
+            pt: {
+                flag: "emojione:flag-for-portugal",
+                langName: "PT",
+                subtitle: "LISTA DE ESPERA ... ",
+                email: "Insere o teu principal email",
+                phone: "Insere o teu principal telemovel",
+                btn: "JUNTA-TE A NÓS",
+                success: "Sucesso! Agora faz parte do THE FITNESS PROJECT.",
+                done: "CONCLUÍDO!"
+            },
+            en: {
+                flag: "emojione:flag-for-united-kingdom",
+                langName: "EN",
+                subtitle: "WAITING LIST ... ",
+                email: "Enter your primary email",
+                phone: "Enter your primary phone number",
+                btn: "JOIN US",
+                success: "Success! You are now part of THE FITNESS PROJECT.",
+                done: "DONE!"
+            }
+        };
+
+        let currentLang = 'pt';
+
+        function updateLang() {
+            const data = i18n[currentLang];
+            const subtitleEl = document.getElementById('subtitle-text');
+
+            document.getElementById('flag-icon').setAttribute('icon', data.flag);
+            document.getElementById('lang-text').innerText = data.langName;
+            document.getElementById('email').placeholder = data.email;
+            document.getElementById('phone').placeholder = data.phone;
+            document.getElementById('submit-btn').innerText = data.btn;
+
+            subtitleEl.style.wordSpacing = 'normal';
+            startTyping(data.subtitle);
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'pt' ? 'en' : 'pt';
+            updateLang();
+        }
+
+        let activeTypeTimeout;
+        let activeRestartTimeout;
+
+        function startTyping(text) {
+            const el = document.getElementById('subtitle-text');
+            clearTimeout(activeTypeTimeout);
+            clearTimeout(activeRestartTimeout);
+
+            el.innerText = '';
+            let i = 0;
+
+            function type() {
+                if (i < text.length) {
+                    el.innerText += text.charAt(i);
+                    i++;
+                    activeTypeTimeout = setTimeout(type, 60); // Slightly faster
+                } else {
+                    activeRestartTimeout = setTimeout(() => {
+                        i = 0;
+                        el.innerText = '';
+                        type();
+                    }, 3000); // 3s pause
+                }
+            }
+            type();
+        }
+
+        /* Background System - Precision Loop */
+        const backgrounds = [
+            'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2000&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2000&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2000&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1517838276558-1d58d9a3b260?q=80&w=2000&auto=format&fit=crop'
+        ];
+
+        const bgContainer = document.getElementById('bg-system');
+        backgrounds.forEach((url, index) => {
+            const div = document.createElement('div');
+            div.className = `bg-layer ${index === 0 ? 'active' : ''}`;
+            div.style.backgroundImage = `url(${url})`;
+            div.style.willChange = 'opacity, transform';
+            bgContainer.appendChild(div);
+        });
+
+        let currentBgIndex = 0;
+        const layers = document.getElementsByClassName('bg-layer');
+
+        function rotateBackgrounds() {
+            layers[currentBgIndex].classList.remove('active');
+            currentBgIndex = (currentBgIndex + 1) % layers.length;
+            layers[currentBgIndex].classList.add('active');
+        }
+
+        // Uniform 5s interval for all slides (no dead time)
+        setInterval(rotateBackgrounds, 5000);
+
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const isDark = !body.hasAttribute('data-theme');
+            if (isDark) {
+                body.setAttribute('data-theme', 'light');
+                icon.setAttribute('icon', 'lucide:sun');
+            } else {
+                body.removeAttribute('data-theme');
+                icon.setAttribute('icon', 'lucide:moon');
+            }
+        }
+
+        document.getElementById('waitlist-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.innerText;
+            btn.innerText = i18n[currentLang].done;
+            btn.style.background = '#22C55E';
+            setTimeout(() => {
+                alert(i18n[currentLang].success);
+                btn.innerText = originalText;
+                btn.style.background = '';
+                this.reset();
+            }, 1000);
+        });
+
+        updateLang();
+    </script>
+</body>
+
+</html>

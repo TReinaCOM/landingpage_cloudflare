@@ -272,6 +272,56 @@
             filter: brightness(1.1);
         }
 
+        /* Share Buttons */
+        .share-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.4rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .share-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.25);
+        }
+
+        .share-btn:hover::before {
+            opacity: 1;
+        }
+
         /* Footer */
         .footer-note {
             margin-top: 4rem;
@@ -364,6 +414,33 @@
             </form>
         </div>
 
+        <div class="share-container">
+            <a href="#" class="share-btn" aria-label="Instagram">
+                <iconify-icon icon="mdi:instagram"></iconify-icon>
+            </a>
+            <a href="#" class="share-btn" aria-label="Facebook">
+                <iconify-icon icon="mdi:facebook"></iconify-icon>
+            </a>
+            <a href="#" class="share-btn" aria-label="WhatsApp">
+                <iconify-icon icon="mdi:whatsapp"></iconify-icon>
+            </a>
+            <a href="#" class="share-btn" aria-label="Telegram">
+                <iconify-icon icon="mdi:telegram"></iconify-icon>
+            </a>
+            <a href="#" class="share-btn" aria-label="TikTok">
+                <iconify-icon icon="ic:baseline-tiktok"></iconify-icon>
+            </a>
+            <a href="#" class="share-btn" aria-label="X">
+                <iconify-icon icon="ri:twitter-x-fill"></iconify-icon>
+            </a>
+            <a href="#" class="share-btn" aria-label="Reddit">
+                <iconify-icon icon="mdi:reddit"></iconify-icon>
+            </a>
+            <a href="#" class="share-btn" aria-label="Email">
+                <iconify-icon icon="mdi:email"></iconify-icon>
+            </a>
+        </div>
+
         <div class="footer-note" id="footer-text">© 2026 THE FITNESS PROJECT</div>
     </main>
 
@@ -397,10 +474,14 @@
 
         function updateLang() {
             const data = i18n[currentLang];
+            // Show the OPPOSITE language in the button (what we will switch TO)
+            const nextLang = currentLang === 'pt' ? 'en' : 'pt';
+            const btnData = i18n[nextLang];
+
             const subtitleEl = document.getElementById('subtitle-text');
 
-            document.getElementById('flag-icon').setAttribute('icon', data.flag);
-            document.getElementById('lang-text').innerText = data.langName;
+            document.getElementById('flag-icon').setAttribute('icon', btnData.flag);
+            document.getElementById('lang-text').innerText = btnData.langName;
             document.getElementById('email').placeholder = data.email;
             document.getElementById('name').placeholder = data.name;
             document.getElementById('phone').placeholder = data.phone;
@@ -534,6 +615,42 @@
         });
 
         updateLang();
+        initShareButtons();
+
+        function initShareButtons() {
+            const title = encodeURIComponent(document.title);
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("Junta-te à lista de espera do THE FITNESS PROJECT! 💪");
+
+            const links = {
+                'Facebook': `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+                'WhatsApp': `https://api.whatsapp.com/send?text=${text}%20${url}`,
+                'Telegram': `https://t.me/share/url?url=${url}&text=${text}`,
+                'X': `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
+                'Reddit': `https://www.reddit.com/submit?url=${url}&title=${text}`,
+                'Email': `mailto:?subject=${title}&body=${text}%0A%0A${url}`
+            };
+
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                const network = btn.getAttribute('aria-label');
+                if (links[network]) {
+                    btn.href = links[network];
+                    btn.target = '_blank';
+                    btn.rel = 'noopener noreferrer';
+                } else if (network === 'Instagram' || network === 'TikTok') {
+                    btn.href = '#';
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        navigator.clipboard.writeText(window.location.href).then(() => {
+                            alert('Link copiado! Podes colar agora no ' + network + '.');
+                        }).catch(err => {
+                            console.error('Erro ao copiar:', err);
+                            alert('Não foi possível copiar o link automaticamente.');
+                        });
+                    };
+                }
+            });
+        }
     </script>
 </body>
 

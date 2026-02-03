@@ -249,6 +249,56 @@
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
         }
 
+        /* Role Checkboxes */
+        .role-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            justify-content: space-between;
+        }
+
+        .role-option {
+            flex: 1;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .role-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+            padding: 0;
+        }
+
+        .role-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem;
+            background: rgba(var(--text-rgb), 0.04);
+            border: 1px solid var(--border);
+            border-radius: 0.85rem;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+            font-family: var(--font-body);
+        }
+
+        .role-option input:checked~.role-card {
+            background: rgba(14, 165, 233, 0.15);
+            border-color: var(--gradient-start);
+            color: #38bdf8;
+            /* Sky blue light */
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.1);
+        }
+
+        .role-card:hover {
+            background: rgba(var(--text-rgb), 0.08);
+        }
+
         .submit-btn {
             width: 100%;
             background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
@@ -410,6 +460,22 @@
                     <iconify-icon icon="lucide:phone"></iconify-icon>
                     <input type="tel" id="phone" required autocomplete="tel">
                 </div>
+
+                <div class="role-group">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="professional" id="role-pro">
+                        <div class="role-card">
+                            <span class="role-text-pro">Sou Profissional</span>
+                        </div>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="practitioner" id="role-prac">
+                        <div class="role-card">
+                            <span class="role-text-prac">Sou Praticante</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="role-error" id="role-error-msg">* Escolhe uma das opções acima</div>
                 <button type="submit" class="submit-btn" id="submit-btn">JUNTA-TE A NÓS</button>
             </form>
         </div>
@@ -453,6 +519,9 @@
                 name: "Primeiro e último nome",
                 email: "Insere o teu principal email",
                 phone: "Insere o teu principal telemovel",
+                rolePro: "Sou Profissional",
+                rolePrac: "Sou Praticante",
+                roleError: "* Escolhe uma das opções acima",
                 btn: "JUNTA-TE A NÓS",
                 success: "Sucesso! Agora faz parte do THE FITNESS PROJECT.",
                 done: "CONCLUÍDO!"
@@ -464,6 +533,9 @@
                 name: "First and last name",
                 email: "Enter your primary email",
                 phone: "Enter your primary phone number",
+                rolePro: "I'm a Professional",
+                rolePrac: "I'm a Practitioner",
+                roleError: "* Please select one option above",
                 btn: "JOIN US",
                 success: "Success! You are now part of THE FITNESS PROJECT.",
                 done: "DONE!"
@@ -485,6 +557,11 @@
             document.getElementById('email').placeholder = data.email;
             document.getElementById('name').placeholder = data.name;
             document.getElementById('phone').placeholder = data.phone;
+            document.getElementById('name').placeholder = data.name;
+            document.getElementById('phone').placeholder = data.phone;
+            document.querySelector('.role-text-pro').innerText = data.rolePro;
+            document.querySelector('.role-text-prac').innerText = data.rolePrac;
+            document.getElementById('role-error-msg').innerText = data.roleError;
             document.getElementById('submit-btn').innerText = data.btn;
 
             subtitleEl.style.wordSpacing = 'normal';
@@ -571,8 +648,18 @@
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
+            const rolePro = document.getElementById('role-pro').checked;
+            const rolePrac = document.getElementById('role-prac').checked;
+            const roleErrorMsg = document.getElementById('role-error-msg');
             const btn = document.getElementById('submit-btn');
             const originalText = btn.innerText;
+
+            roleErrorMsg.style.display = 'none';
+
+            if (!rolePro && !rolePrac) {
+                roleErrorMsg.style.display = 'block';
+                return;
+            }
 
             if (!name || !email || !phone) {
                 alert(i18n[currentLang].success.replace('Success!', 'Por favor, preencha todos os campos.'));
@@ -592,7 +679,8 @@
                     body: JSON.stringify({
                         name: name,
                         email: email,
-                        message: phone
+                        message: phone,
+                        role: rolePro ? 'professional' : 'practitioner'
                     })
                 });
 

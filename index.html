@@ -598,12 +598,84 @@
 
         /* Background Image Layer */
         .audience-bg {
+
+            /* ============================================
+           MOBILE RESPONSIVENESS
+           ============================================ */
+            @media (max-width: 900px) {
+                .audience-section {
+                    height: auto;
+                    aspect-ratio: auto;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 2rem;
+                    margin-top: 2rem;
+                    margin-bottom: 2rem;
+                }
+
+                /* Disable absolute positioning */
+                .audience-card,
+                .area-praticante,
+                .area-pro,
+                .area-nutri,
+                .area-osteo,
+                .area-physio,
+                .area-empresa {
+                    position: relative;
+                    top: auto;
+                    left: auto;
+                    right: auto;
+                    bottom: auto;
+                    transform: none;
+                    width: 90%;
+                    max-width: 340px;
+                    height: auto;
+                    min-height: 200px;
+                }
+
+                /* Center Card: First and slightly bigger margin */
+                .area-praticante {
+                    order: -1;
+                    width: 100%;
+                    max-width: 360px;
+                    margin-bottom: 2rem;
+                }
+
+                /* Satellite Cards: Order logically */
+                .area-pro {
+                    order: 1;
+                }
+
+                .area-nutri {
+                    order: 2;
+                }
+
+                .area-osteo {
+                    order: 3;
+                }
+
+                .area-physio {
+                    order: 4;
+                }
+
+                .area-empresa {
+                    order: 5;
+                }
+
+                /* Hide SVG Lines as they don't make sense in stack */
+                .connections-svg {
+                    display: none;
+                }
+            }
+
             position: absolute;
             inset: 0;
             background-size: cover;
             background-position: center;
             opacity: 0.4;
-            transition: transform 0.6s ease, opacity 0.4s;
+            transition: transform 0.6s ease,
+            opacity 0.4s;
             z-index: -2;
             filter: grayscale(20%);
         }

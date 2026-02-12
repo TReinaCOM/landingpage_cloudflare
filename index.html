@@ -305,25 +305,47 @@
 
         .submit-btn {
             width: 100%;
-            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            /* Decreased yellow/orange by pushing it to the very end and using more sky blue */
+            background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 80%, #f59e0b 100%);
             color: white;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 1rem;
             border-radius: 0.85rem;
             font-family: var(--font-display);
             font-weight: 800;
             font-style: italic;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 0.75rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 1.25rem;
             text-transform: uppercase;
-            box-shadow: 0 8px 15px -5px rgba(14, 165, 233, 0.3);
+            /* Intense Blue and White Glow */
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.6),
+                0 0 30px rgba(14, 165, 233, 0.3),
+                0 0 45px rgba(255, 255, 255, 0.1);
+            animation: pulse-glow 3s infinite ease-in-out;
+            position: relative;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(14, 165, 233, 0.6), 0 0 30px rgba(14, 165, 233, 0.3), 0 0 45px rgba(255, 255, 255, 0.1);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(14, 165, 233, 0.8), 0 0 45px rgba(14, 165, 233, 0.5), 0 0 60px rgba(255, 255, 255, 0.2);
+                transform: scale(1.01);
+            }
         }
 
         .submit-btn:hover {
-            transform: scale(1.01);
             filter: brightness(1.1);
+            transform: translateY(-2px) scale(1.02);
+            animation-play-state: paused;
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.9), 0 0 60px rgba(255, 255, 255, 0.3);
         }
 
         /* Share Buttons */

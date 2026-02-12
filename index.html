@@ -63,6 +63,10 @@
             transition: background-color var(--transition), color var(--transition);
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* HD Background System */
         .bg-system {
             position: fixed;
@@ -384,43 +388,117 @@
         /* Mobile Adjustments */
         @media (max-width: 640px) {
             .page-wrapper {
-                padding-top: 8rem;
+                padding-top: 4rem;
+                padding-left: 0.25rem;
+                padding-right: 0.25rem;
+                width: 100%;
+                max-width: 100vw;
+                overflow-x: hidden;
             }
 
             .top-controls {
-                top: 1rem;
-                right: 1rem;
-                gap: 0.5rem;
+                top: 0.5rem;
+                right: 0.5rem;
+                gap: 0.25rem;
             }
 
             .control-btn {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.75rem;
-                border-radius: 10px;
+                padding: 0.35rem 0.55rem;
+                font-size: 0.7rem;
+                border-radius: 8px;
             }
 
             h1 {
-                font-size: 2.25rem;
-                margin-bottom: 0.5rem;
+                font-size: 1.5rem;
+                margin-bottom: 0.2rem;
+                line-height: 1.1;
+                max-width: 90%;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .subtitle-container {
-                margin-bottom: 2.5rem;
+                margin-bottom: 1.5rem;
+                font-size: 0.8rem;
+                height: 1.2rem;
             }
 
+            /* Form Card Adjustments */
             .join-card {
-                padding: 1.5rem;
-                border-radius: 1.5rem;
+                padding: 1rem;
+                border-radius: 1rem;
+                width: 94%;
+                max-width: 360px;
+                margin: 0 auto;
+                box-sizing: border-box;
+            }
+
+            .join-card h2 {
+                margin-bottom: 0.75rem;
+                font-size: 1.4rem !important;
+                /* Force override */
+            }
+
+            /* Role Grid: Stack vertically */
+            .role-list {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+
+            .role-box {
+                padding: 0.6rem;
+                min-height: auto;
+                width: 100%;
+                justify-content: flex-start;
+                gap: 0.5rem;
+            }
+
+            .role-box span {
+                font-size: 0.75rem;
+                line-height: 1.2;
+                text-align: left;
+            }
+
+            .role-check {
+                font-size: 1.1rem !important;
             }
 
             input {
-                padding: 0.85rem 0.85rem 0.85rem 3rem;
-                font-size: 0.85rem;
+                padding: 0.65rem 0.65rem 0.65rem 2.5rem;
+                font-size: 0.8rem;
+                border-radius: 0.65rem;
             }
 
-            .submit-btn {
-                padding: 0.85rem;
+            .form-group iconify-icon {
+                left: 0.75rem;
                 font-size: 0.9rem;
+            }
+
+            /* Submit Button */
+            .submit-btn {
+                padding: 0.75rem;
+                font-size: 0.8rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-top: 0.5rem;
+            }
+
+            /* Footer & Share */
+            .footer-note {
+                margin-top: 2rem;
+                font-size: 0.6rem;
+            }
+
+            .share-container {
+                margin-top: 2rem;
+                gap: 0.5rem;
+            }
+
+            .share-btn {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1.2rem;
             }
         }
 
@@ -782,13 +860,15 @@
            FORM — force 7 buttons on ONE row
            ============================================ */
         .join-card {
-            max-width: 1100px;
+            max-width: 480px;
+            /* Restricted width for vertical alignment */
             width: 95%;
         }
 
         .role-list {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: 1fr;
+            /* Always vertical for better framing of long text */
             gap: 0.5rem;
             margin-bottom: 2rem;
             width: 100%;
@@ -860,7 +940,8 @@
                 aspect-ratio: auto;
                 max-height: none;
                 display: grid !important;
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
+                /* Stack vertically if space is tight */
                 gap: 1rem;
                 padding: 0 1rem;
             }
@@ -888,18 +969,14 @@
             }
 
             .role-list {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 600px) {
-            .role-list {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .join-card {
-                padding: 1.25rem;
-            }
+        /* Removed conflicting media query forcing 2 columns */
+        .role-list {
+            /* Ensure single column on very small screens */
+            grid-template-columns: 1fr !important;
         }
     </style>
 </head>

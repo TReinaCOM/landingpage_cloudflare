@@ -305,49 +305,60 @@
 
         .submit-btn {
             width: 100%;
-            /* Brightened orange/yellow end (using #FFD60A) and tweaked stops */
-            background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 70%, #FFD60A 100%);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            /* Whiter border */
-            padding: 1rem;
+            /* Pure Blue Gradient - No Orange */
+            background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 50%, #38bdf8 100%);
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            /* Solid White Border */
+            padding: 1.1rem;
             border-radius: 0.85rem;
             font-family: var(--font-display);
             font-weight: 800;
             font-style: italic;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-top: 1.25rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 1.5rem;
             text-transform: uppercase;
-            /* Extra Intense Blue and White Glow */
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.8),
-                0 0 40px rgba(255, 255, 255, 0.4),
-                0 0 60px rgba(14, 165, 233, 0.4),
-                0 0 80px rgba(255, 255, 255, 0.1);
-            animation: pulse-glow 3s infinite ease-in-out;
+            letter-spacing: 0.05em;
+
+            /* Creative Multi-layered Blue & White Glow */
+            box-shadow:
+                0 0 10px rgba(255, 255, 255, 0.8),
+                0 0 20px rgba(14, 165, 233, 1),
+                0 0 40px rgba(14, 165, 233, 0.6),
+                inset 0 0 15px rgba(255, 255, 255, 0.4);
+            /* Inner white glow */
+
+            animation: ultimate-glow 3s infinite ease-in-out;
             position: relative;
+            z-index: 1;
         }
 
-        @keyframes pulse-glow {
+        @keyframes ultimate-glow {
 
             0%,
             100% {
-                box-shadow: 0 0 20px rgba(14, 165, 233, 0.8), 0 0 40px rgba(255, 255, 255, 0.4), 0 0 60px rgba(14, 165, 233, 0.4), 0 0 80px rgba(255, 255, 255, 0.1);
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(14, 165, 233, 1), 0 0 40px rgba(14, 165, 233, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.4);
                 transform: scale(1);
             }
 
             50% {
-                box-shadow: 0 0 35px rgba(14, 165, 233, 0.95), 0 0 65px rgba(255, 255, 255, 0.6), 0 0 90px rgba(14, 165, 233, 0.5), 0 0 120px rgba(255, 255, 255, 0.2);
-                transform: scale(1.01);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(14, 165, 233, 1), 0 0 70px rgba(14, 165, 233, 0.7), inset 0 0 25px rgba(255, 255, 255, 0.6);
+                transform: scale(1.02);
+                letter-spacing: 0.1em;
             }
         }
 
         .submit-btn:hover {
-            filter: brightness(1.15);
-            transform: translateY(-2px) scale(1.02);
+            filter: brightness(1.2);
+            transform: translateY(-4px) scale(1.03);
             animation-play-state: paused;
-            box-shadow: 0 0 40px rgba(14, 165, 233, 1), 0 0 80px rgba(255, 255, 255, 0.5);
+            box-shadow:
+                0 0 25px rgba(255, 255, 255, 1),
+                0 0 50px rgba(14, 165, 233, 1),
+                0 0 80px rgba(14, 165, 233, 0.8);
+            border-color: rgba(255, 255, 255, 1);
         }
 
         /* Share Buttons */

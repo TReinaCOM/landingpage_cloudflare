@@ -860,15 +860,13 @@
            FORM — force 7 buttons on ONE row
            ============================================ */
         .join-card {
-            max-width: 480px;
-            /* Restricted width for vertical alignment */
+            max-width: 1100px;
             width: 95%;
         }
 
         .role-list {
             display: grid;
-            grid-template-columns: 1fr;
-            /* Always vertical for better framing of long text */
+            grid-template-columns: repeat(6, 1fr);
             gap: 0.5rem;
             margin-bottom: 2rem;
             width: 100%;
@@ -969,7 +967,8 @@
             }
 
             .role-list {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
+                /* 2 rows on tablet */
             }
         }
 

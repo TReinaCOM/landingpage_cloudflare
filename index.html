@@ -967,15 +967,9 @@
             }
 
             .role-list {
-                grid-template-columns: repeat(3, 1fr);
-                /* 2 rows on tablet */
+                grid-template-columns: repeat(6, 1fr);
+                /* Keep horizontal on tablet as requested */
             }
-        }
-
-        /* Removed conflicting media query forcing 2 columns */
-        .role-list {
-            /* Ensure single column on very small screens */
-            grid-template-columns: 1fr !important;
         }
     </style>
 </head>

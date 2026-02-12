@@ -423,6 +423,412 @@
                 font-size: 0.9rem;
             }
         }
+
+        /* ============================================
+           HUB-AND-SPOKE CARD LAYOUT
+           ============================================ */
+        .audience-section {
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 4rem;
+            /* Height accommodates the circle */
+            aspect-ratio: 1.1 / 1;
+            max-height: 1100px;
+            overflow: visible;
+        }
+
+        /* SVG connections behind everything */
+        .connections-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .connection-line {
+            stroke: var(--gradient-start);
+            stroke-width: 3;
+            stroke-dasharray: 12 8;
+            opacity: 0.55;
+            filter: drop-shadow(0 0 4px rgba(14, 165, 233, 0.4));
+            animation: dashPingPong 6s ease-in-out infinite;
+        }
+
+        @keyframes dashPingPong {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            40% {
+                stroke-dashoffset: -200;
+            }
+
+            50% {
+                stroke-dashoffset: -200;
+            }
+
+            90% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Each card is absolutely positioned */
+        .audience-card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1rem;
+            border-radius: 1.25rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: absolute;
+            overflow: hidden;
+            width: 220px;
+            height: 220px;
+            z-index: 1;
+        }
+
+        /* CENTER card — Praticante — bigger, glowing */
+        .area-praticante {
+            width: 280px;
+            height: 280px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            border: 2px solid var(--gradient-start);
+            box-shadow:
+                0 0 40px rgba(14, 165, 233, 0.5),
+                0 0 80px rgba(14, 165, 233, 0.35),
+                0 0 140px rgba(14, 165, 233, 0.2),
+                0 0 200px rgba(14, 165, 233, 0.1),
+                inset 0 0 40px rgba(14, 165, 233, 0.08);
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow:
+                    0 0 40px rgba(14, 165, 233, 0.5),
+                    0 0 80px rgba(14, 165, 233, 0.35),
+                    0 0 140px rgba(14, 165, 233, 0.2),
+                    0 0 200px rgba(14, 165, 233, 0.1),
+                    inset 0 0 40px rgba(14, 165, 233, 0.08);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 60px rgba(14, 165, 233, 0.65),
+                    0 0 100px rgba(14, 165, 233, 0.45),
+                    0 0 180px rgba(14, 165, 233, 0.25),
+                    0 0 260px rgba(14, 165, 233, 0.12),
+                    inset 0 0 60px rgba(14, 165, 233, 0.12);
+            }
+        }
+
+        .area-praticante .audience-title {
+            font-size: 1.2rem;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .area-praticante .audience-icon {
+            font-size: 3.5rem;
+        }
+
+        /* 6 satellite positions — arranged in a circle around center
+           Using top/left percentages, translated to center each card.
+           Clock positions: 12, 2, 4, 6, 8, 10 o'clock */
+
+        /* Profissional (TOP Center - 12h) */
+        .area-pro {
+            top: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Nutricionista (MID Left - 9h) */
+        .area-nutri {
+            top: 50%;
+            left: 2%;
+            transform: translateY(-50%);
+        }
+
+        /* Osteopata / Massagista (MID Right - 3h) */
+        .area-osteo {
+            top: 50%;
+            right: 2%;
+            left: auto;
+            transform: translateY(-50%);
+        }
+
+        /* Fisioterapeuta (BOTTOM Left - 7.5h) */
+        .area-physio {
+            bottom: 5%;
+            left: 18%;
+            top: auto;
+        }
+
+        /* Empresa (BOTTOM Right - 4.5h) */
+        .area-empresa {
+            bottom: 5%;
+            right: 18%;
+            left: auto;
+            top: auto;
+            transform: none;
+        }
+
+        /* Background Image Layer */
+        .audience-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+            transition: transform 0.6s ease, opacity 0.4s;
+            z-index: -2;
+            filter: grayscale(20%);
+        }
+
+        [data-theme="light"] .audience-bg {
+            opacity: 0.5;
+            filter: grayscale(10%);
+        }
+
+        /* Gradient Overlay for Text Readability */
+        .audience-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.25) 100%);
+            z-index: -1;
+        }
+
+        [data-theme="light"] .audience-card::after {
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.35) 100%);
+        }
+
+        .audience-card:hover {
+            border-color: var(--gradient-start);
+            box-shadow:
+                0 25px 60px -12px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(14, 165, 233, 0.6);
+            z-index: 5;
+        }
+
+        .audience-card:hover .audience-bg {
+            transform: scale(1.15);
+            opacity: 0.6;
+            filter: grayscale(0%);
+        }
+
+        .audience-icon {
+            font-size: 2.25rem;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 15px rgba(14, 165, 233, 0.3));
+            transition: transform 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audience-card:hover .audience-icon {
+            transform: scale(1.15) rotate(-5deg);
+        }
+
+        .audience-title {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .audience-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            max-width: 170px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /* Physio image icon — use actual image instead of iconify */
+        .physio-icon-img {
+            width: 2.25rem;
+            height: 2.25rem;
+            object-fit: contain;
+            filter: invert(1);
+            /* white on dark theme */
+            transition: transform 0.4s;
+        }
+
+        [data-theme="light"] .physio-icon-img {
+            filter: none;
+            /* black on light theme */
+        }
+
+        .physio-icon-img-small {
+            width: 1.1rem;
+            height: 1.1rem;
+            object-fit: contain;
+            filter: invert(1);
+        }
+
+        [data-theme="light"] .physio-icon-img-small {
+            filter: none;
+        }
+
+        .role-item input:checked+.role-box .physio-icon-img-small {
+            filter: invert(1);
+            /* always white when selected */
+        }
+
+        /* ============================================
+           FORM — force 7 buttons on ONE row
+           ============================================ */
+        .join-card {
+            max-width: 1100px;
+            width: 95%;
+        }
+
+        .role-list {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .role-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .role-item input {
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
+            pointer-events: none;
+        }
+
+        .role-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem 0.25rem;
+            background: rgba(var(--text-rgb), 0.03);
+            border: 1px solid var(--border);
+            border-radius: 0.85rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+            color: var(--text);
+            font-size: 0.7rem;
+            text-align: center;
+            height: 100%;
+            gap: 0.3rem;
+            white-space: nowrap;
+        }
+
+        .role-item input:checked+.role-box {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 8px 20px -5px rgba(14, 165, 233, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .role-box:hover {
+            background: rgba(var(--text-rgb), 0.08);
+        }
+
+        .role-check {
+            font-size: 1.1rem;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .role-item input:checked+.role-box .role-check {
+            opacity: 1;
+            color: white;
+            transform: scale(1.2);
+        }
+
+        /* ============================================
+           MOBILE
+           ============================================ */
+        @media (max-width: 900px) {
+            .audience-section {
+                /* Fall back to a simple grid on mobile */
+                position: relative;
+                aspect-ratio: auto;
+                max-height: none;
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .audience-card {
+                position: relative !important;
+                width: auto !important;
+                height: auto !important;
+                min-height: 160px;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+            }
+
+            .area-praticante {
+                grid-column: 1 / -1;
+                /* Full width center card */
+                box-shadow: 0 0 25px rgba(14, 165, 233, 0.15);
+            }
+
+            .connections-svg {
+                display: none;
+            }
+
+            .role-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .role-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .join-card {
+                padding: 1.25rem;
+            }
+        }
     </style>
 </head>
 
@@ -446,8 +852,131 @@
             <p class="subtitle" id="subtitle-text"></p>
         </div>
 
+        <div class="audience-section">
+            <svg class="connections-svg" xmlns="http://www.w3.org/2000/svg">
+                <!-- Center → Pro (50%,12%) -->
+                <line x1="50%" y1="50%" x2="50%" y2="12%" class="connection-line" />
+                <!-- Center → Nutri (10%,50%) -->
+                <line x1="50%" y1="50%" x2="10%" y2="50%" class="connection-line" />
+                <!-- Center → Osteo (90%,50%) -->
+                <line x1="50%" y1="50%" x2="90%" y2="50%" class="connection-line" />
+                <!-- Center → Physio (26%,85%) -->
+                <line x1="50%" y1="50%" x2="26%" y2="85%" class="connection-line" />
+                <!-- Center → Empresa (74%,85%) -->
+                <line x1="50%" y1="50%" x2="74%" y2="85%" class="connection-line" />
+            </svg>
+
+            <!-- 1. Praticante / Atleta (CENTER) -->
+            <div class="audience-card area-praticante">
+                <div class="audience-bg"
+                    style="background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1000&auto=format&fit=crop');">
+                </div>
+                <iconify-icon icon="lucide:dumbbell" class="audience-icon"></iconify-icon>
+                <h3 class="audience-title" data-i18n="cardSport">Praticante de Desporto /<br>Atleta Amador / Atleta
+                    Profissional</h3>
+                <p class="audience-desc" data-i18n="descSport">Eleva o teu treino e alcança novos limites.</p>
+            </div>
+            <!-- 3. Profissional Fitness (Top Center) -->
+            <div class="audience-card area-pro">
+                <div class="audience-bg"
+                    style="background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1000&auto=format&fit=crop');">
+                </div>
+                <iconify-icon icon="lucide:biceps-flexed" class="audience-icon"></iconify-icon>
+                <h3 class="audience-title" data-i18n="cardPro">Profissional do Fitness</h3>
+                <p class="audience-desc" data-i18n="descPro">Gere os teus clientes de forma inteligente.</p>
+            </div>
+            <!-- 4. Nutricionista (Top Right) -->
+            <div class="audience-card area-nutri">
+                <div class="audience-bg"
+                    style="background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1000&auto=format&fit=crop');">
+                </div>
+                <iconify-icon icon="lucide:apple" class="audience-icon"></iconify-icon>
+                <h3 class="audience-title" data-i18n="cardNutri">Nutricionista</h3>
+                <p class="audience-desc" data-i18n="descNutri">Planos alimentares e acompanhamento detalhado.</p>
+            </div>
+            <!-- 5. Osteopata/Massagista (Left) -->
+            <div class="audience-card area-osteo">
+                <div class="audience-bg"
+                    style="background-image: url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1000&auto=format&fit=crop');">
+                </div>
+                <iconify-icon icon="tabler:massage" class="audience-icon"></iconify-icon>
+                <h3 class="audience-title" data-i18n="cardOsteo">Osteopata / Massagista</h3>
+                <p class="audience-desc" data-i18n="descOsteo">Recuperação muscular e bem-estar total.</p>
+            </div>
+            <!-- 6. Fisioterapeuta (Right) -->
+            <div class="audience-card area-physio">
+                <div class="audience-bg"
+                    style="background-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1000&auto=format&fit=crop');">
+                </div>
+                <iconify-icon icon="medical-icon:i-physical-therapy" class="audience-icon"></iconify-icon>
+                <h3 class="audience-title" data-i18n="cardPhysio">Fisioterapeuta</h3>
+                <p class="audience-desc" data-i18n="descPhysio">Reabilitação eficaz e prevenção de lesões.</p>
+            </div>
+            <!-- 7. Empresa (Bottom Center) -->
+            <div class="audience-card area-empresa">
+                <div class="audience-bg"
+                    style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop');">
+                </div>
+                <iconify-icon icon="lucide:building-2" class="audience-icon"></iconify-icon>
+                <h3 class="audience-title" data-i18n="cardCompany">Empresa</h3>
+                <p class="audience-desc" data-i18n="descCompany">Saúde e produtividade para a tua equipa.</p>
+            </div>
+        </div>
+
         <div class="join-card">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; font-family: var(--font-display);"
+                data-i18n="formTitle">INSCREVE-TE</h2>
             <form id="waitlist-form">
+                <div class="role-list">
+                    <!-- Options injected via JS or static HTML? Let's use static HTML for clarity and easy styling, updated via JS text -->
+                    <label class="role-item">
+                        <input type="radio" name="role" value="sport_practitioner_athlete">
+                        <div class="role-box">
+                            <iconify-icon icon="lucide:dumbbell" class="role-check"></iconify-icon>
+                            <span data-i18n="cardSport">Praticante de Desporto /<br>Atleta Amador / Atleta
+                                Profissional</span>
+                        </div>
+                    </label>
+                    <label class="role-item">
+                        <input type="radio" name="role" value="fitness_pro">
+                        <div class="role-box">
+                            <iconify-icon icon="lucide:biceps-flexed" class="role-check"></iconify-icon>
+                            <span data-i18n="cardPro">Profissional</span>
+                        </div>
+                    </label>
+                    <label class="role-item">
+                        <input type="radio" name="role" value="nutritionist">
+                        <div class="role-box">
+                            <iconify-icon icon="lucide:apple" class="role-check"></iconify-icon>
+                            <span data-i18n="cardNutri">Nutri</span>
+                        </div>
+                    </label>
+                    <label class="role-item">
+                        <input type="radio" name="role" value="osteopath">
+                        <div class="role-box">
+                            <iconify-icon icon="tabler:massage" class="role-check"></iconify-icon>
+                            <span data-i18n="cardOsteo">Osteopata</span>
+                        </div>
+                    </label>
+                    <label class="role-item">
+                        <input type="radio" name="role" value="physiotherapist">
+                        <div class="role-box">
+                            <iconify-icon icon="medical-icon:i-physical-therapy" class="role-check"></iconify-icon>
+                            <span data-i18n="cardPhysio">Fisio</span>
+                        </div>
+                    </label>
+                    <label class="role-item">
+                        <input type="radio" name="role" value="company">
+                        <div class="role-box">
+                            <iconify-icon icon="lucide:building-2" class="role-check"></iconify-icon>
+                            <span data-i18n="cardCompany">Empresa</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="role-error" id="role-error-msg"
+                    style="display:none; color: #ef4444; font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">*
+                    Escolhe uma das opções acima</div>
+
                 <div class="form-group">
                     <iconify-icon icon="lucide:user"></iconify-icon>
                     <input type="text" id="name" required autocomplete="name">
@@ -461,21 +990,6 @@
                     <input type="tel" id="phone" required autocomplete="tel">
                 </div>
 
-                <div class="role-group">
-                    <label class="role-option">
-                        <input type="radio" name="role" value="professional" id="role-pro">
-                        <div class="role-card">
-                            <span class="role-text-pro">Sou Profissional</span>
-                        </div>
-                    </label>
-                    <label class="role-option">
-                        <input type="radio" name="role" value="practitioner" id="role-prac">
-                        <div class="role-card">
-                            <span class="role-text-prac">Sou Praticante</span>
-                        </div>
-                    </label>
-                </div>
-                <div class="role-error" id="role-error-msg">* Escolhe uma das opções acima</div>
                 <button type="submit" class="submit-btn" id="submit-btn">JUNTA-TE A NÓS</button>
             </form>
         </div>
@@ -516,11 +1030,22 @@
                 flag: "emojione:flag-for-portugal",
                 langName: "PT",
                 subtitle: "LISTA DE ESPERA ... ",
+                formTitle: "INSCREVE-TE",
+                cardSport: "Praticante de Desporto /<br>Atleta Amador / Atleta Profissional",
+                cardPro: "Profissional do Fitness",
+                cardNutri: "Nutricionista",
+                cardOsteo: "Osteopata / Massagista",
+                cardPhysio: "Fisioterapeuta",
+                cardCompany: "Empresa",
+                descSport: "Potencia a tua performance e alcança novos limites.",
+                descPro: "Gere os teus clientes de forma inteligente.",
+                descNutri: "Planos alimentares e acompanhamento detalhado.",
+                descOsteo: "Recuperação muscular e bem-estar total.",
+                descPhysio: "Reabilitação eficaz e prevenção de lesões.",
+                descCompany: "Saúde e produtividade para a tua equipa.",
                 name: "Primeiro e último nome",
                 email: "Insere o teu principal email",
                 phone: "Insere o teu principal telemovel",
-                rolePro: "Sou Profissional",
-                rolePrac: "Sou Praticante",
                 roleError: "* Escolhe uma das opções acima",
                 btn: "JUNTA-TE A NÓS",
                 success: "Sucesso! Agora faz parte do THE FITNESS PROJECT.",
@@ -530,11 +1055,22 @@
                 flag: "emojione:flag-for-united-kingdom",
                 langName: "EN",
                 subtitle: "WAITING LIST ... ",
+                formTitle: "JOIN US",
+                cardSport: "Sports Practitioner /<br>Amateur Athlete / Pro Athlete",
+                cardPro: "Fitness Professional",
+                cardNutri: "Nutritionist",
+                cardOsteo: "Osteopath / Masseur",
+                cardPhysio: "Physiotherapist",
+                cardCompany: "Company",
+                descSport: "Boost your performance and reach new limits.",
+                descPro: "Manage your clients intelligently.",
+                descNutri: "Meal plans and detailed tracking.",
+                descOsteo: "Muscle recovery and total wellness.",
+                descPhysio: "Effective rehab and injury prevention.",
+                descCompany: "Health and productivity for your team.",
                 name: "First and last name",
                 email: "Enter your primary email",
                 phone: "Enter your primary phone number",
-                rolePro: "I'm a Professional",
-                rolePrac: "I'm a Practitioner",
                 roleError: "* Please select one option above",
                 btn: "JOIN US",
                 success: "Success! You are now part of THE FITNESS PROJECT.",
@@ -554,13 +1090,20 @@
 
             document.getElementById('flag-icon').setAttribute('icon', btnData.flag);
             document.getElementById('lang-text').innerText = btnData.langName;
+
+            // Update placeholders
             document.getElementById('email').placeholder = data.email;
             document.getElementById('name').placeholder = data.name;
             document.getElementById('phone').placeholder = data.phone;
-            document.getElementById('name').placeholder = data.name;
-            document.getElementById('phone').placeholder = data.phone;
-            document.querySelector('.role-text-pro').innerText = data.rolePro;
-            document.querySelector('.role-text-prac').innerText = data.rolePrac;
+
+            // Update static texts via data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (data[key]) {
+                    el.innerHTML = data[key];
+                }
+            });
+
             document.getElementById('role-error-msg').innerText = data.roleError;
             document.getElementById('submit-btn').innerText = data.btn;
 
@@ -648,15 +1191,15 @@
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
-            const rolePro = document.getElementById('role-pro').checked;
-            const rolePrac = document.getElementById('role-prac').checked;
+
+            const selectedRole = document.querySelector('input[name="role"]:checked');
             const roleErrorMsg = document.getElementById('role-error-msg');
             const btn = document.getElementById('submit-btn');
             const originalText = btn.innerText;
 
             roleErrorMsg.style.display = 'none';
 
-            if (!rolePro && !rolePrac) {
+            if (!selectedRole) {
                 roleErrorMsg.style.display = 'block';
                 return;
             }
@@ -680,7 +1223,7 @@
                         name: name,
                         email: email,
                         message: phone,
-                        role: rolePro ? 'professional' : 'practitioner'
+                        role: selectedRole.value
                     })
                 });
 
@@ -739,6 +1282,8 @@
                 }
             });
         }
+
+
     </script>
 </body>
 

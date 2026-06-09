@@ -54,7 +54,7 @@ export async function onRequestPost(context) {
         // 3. Enviar dados para o Webhook do n8n (Mautic + Stalwart)
         try {
             // Por defeito usa a URL de produção. Você pode definir a env.N8N_WEBHOOK_URL para a de teste se preferir.
-            const n8nWebhookUrl = env.N8N_WEBHOOK_URL || 'https://n8n.digital2fit.com/webhook-test/thefitnessproject';
+            const n8nWebhookUrl = env.N8N_WEBHOOK_URL || 'https://webhook.digital2fit.com/webhook/thefitnessproject';
 
             await fetch(n8nWebhookUrl, {
                 method: 'POST',

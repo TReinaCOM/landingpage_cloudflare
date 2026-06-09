@@ -51,6 +51,29 @@ export async function onRequestPost(context) {
             }
         }
 
+        // 3. Enviar dados para o Webhook do n8n (Mautic + Stalwart)
+        try {
+            // Por defeito usa a URL de produção. Você pode definir a env.N8N_WEBHOOK_URL para a de teste se preferir.
+            const n8nWebhookUrl = env.N8N_WEBHOOK_URL || 'https://n8n.digital2fit.com/webhook-test/thefitnessproject';
+
+            await fetch(n8nWebhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    message: message,
+                    role: role,
+                    city: city || '',
+                    postal_code: postal_code || ''
+                })
+            });
+        } catch (n8nError) {
+            console.error('Erro ao enviar para o n8n:', n8nError);
+        }
+
         return new Response(JSON.stringify({ success: true }), {
             headers: corsHeaders
         });

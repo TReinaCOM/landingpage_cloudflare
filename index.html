@@ -240,6 +240,16 @@
             margin-bottom: 0.85rem;
         }
 
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
         .form-group iconify-icon {
             position: absolute;
             left: 1.1rem;
@@ -992,6 +1002,11 @@
                 left: 0.85rem;
             }
 
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
             /* Submit Button */
             .submit-btn {
                 padding: 0.85rem;
@@ -1161,13 +1176,25 @@
                     <iconify-icon icon="lucide:user"></iconify-icon>
                     <input type="text" id="name" required autocomplete="name">
                 </div>
-                <div class="form-group">
-                    <iconify-icon icon="lucide:mail"></iconify-icon>
-                    <input type="email" id="email" required autocomplete="email">
+                <div class="form-row">
+                    <div class="form-group">
+                        <iconify-icon icon="lucide:mail"></iconify-icon>
+                        <input type="email" id="email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <iconify-icon icon="lucide:phone"></iconify-icon>
+                        <input type="tel" id="phone" required autocomplete="tel">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <iconify-icon icon="lucide:phone"></iconify-icon>
-                    <input type="tel" id="phone" required autocomplete="tel">
+                <div class="form-row">
+                    <div class="form-group">
+                        <iconify-icon icon="lucide:map-pin"></iconify-icon>
+                        <input type="text" id="city" autocomplete="address-level2">
+                    </div>
+                    <div class="form-group">
+                        <iconify-icon icon="lucide:mailbox"></iconify-icon>
+                        <input type="text" id="postal_code" autocomplete="postal-code">
+                    </div>
                 </div>
 
                 <button type="submit" class="submit-btn" id="submit-btn">JUNTA-TE A NÓS</button>
@@ -1226,6 +1253,8 @@
                 name: "Primeiro e último nome",
                 email: "Insere o teu principal email",
                 phone: "Insere o teu principal telemovel",
+                city: "Cidade (Opcional)",
+                postalCode: "Código Postal (Opcional)",
                 roleError: "* Escolhe uma das opções acima",
                 btn: "JUNTA-TE A NÓS",
                 success: "Sucesso! Agora faz parte do THE FITNESS PROJECT.",
@@ -1251,6 +1280,8 @@
                 name: "First and last name",
                 email: "Enter your primary email",
                 phone: "Enter your primary phone number",
+                city: "City (Optional)",
+                postalCode: "Postal Code (Optional)",
                 roleError: "* Please select one option above",
                 btn: "JOIN US",
                 success: "Success! You are now part of THE FITNESS PROJECT.",
@@ -1275,6 +1306,8 @@
             document.getElementById('email').placeholder = data.email;
             document.getElementById('name').placeholder = data.name;
             document.getElementById('phone').placeholder = data.phone;
+            document.getElementById('city').placeholder = data.city;
+            document.getElementById('postal_code').placeholder = data.postalCode;
 
             // Update static texts via data-i18n attribute
             document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -1371,6 +1404,8 @@
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const postalCode = document.getElementById('postal_code').value.trim();
 
             const selectedRole = document.querySelector('input[name="role"]:checked');
             const roleErrorMsg = document.getElementById('role-error-msg');
@@ -1403,7 +1438,9 @@
                         name: name,
                         email: email,
                         message: phone,
-                        role: selectedRole.value
+                        role: selectedRole.value,
+                        city: city,
+                        postal_code: postalCode
                     })
                 });
 

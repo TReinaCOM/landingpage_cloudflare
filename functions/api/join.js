@@ -8,21 +8,20 @@ export async function onRequestPost(context) {
     try {
         // Lê os dados JSON enviados pelo setup do index.html
         const data = await request.json();
-        const { name, email, message } = data;
+        const { name, email, message, role, city, postal_code } = data;
 
-        if (!name || !email) {
-            return new Response(JSON.stringify({ error: 'Nome e email são obrigatórios' }), {
+        if (!name || !email || !role) {
+            return new Response(JSON.stringify({ error: 'Nome, email e o perfil são obrigatórios' }), {
                 status: 400,
                 headers: corsHeaders
             });
         }
 
         // 1. Inserir na base de dados D1
-        // Usando a tabela 'contacts' conforme o seu último exemplo
         const stmt = env.DB.prepare(
-            'INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)'
+            'INSERT INTO contacts (name, email, message, role, city, postal_code) VALUES (?, ?, ?, ?, ?, ?)'
         );
-        await stmt.bind(name, email, message).run();
+        await stmt.bind(name, email, message, role, city, postal_code).run();
 
         // 2. Enviar notificação pelo Resend (Obrigatório configurar RESEND_API_KEY na Cloudflare)
         if (env.RESEND_API_KEY) {
@@ -40,7 +39,10 @@ export async function onRequestPost(context) {
                         html: `<h3>Nova lead recebida!</h3>
                    <p><strong>Nome:</strong> ${name}</p>
                    <p><strong>Email:</strong> ${email}</p>
-                   <p><strong>Telefone/Mensagem:</strong> ${message}</p>`
+                   <p><strong>Telefone/Mensagem:</strong> ${message}</p>
+                   <p><strong>Perfil:</strong> ${role}</p>
+                   <p><strong>Cidade:</strong> ${city || 'Não informado'}</p>
+                   <p><strong>Código Postal:</strong> ${postal_code || 'Não informado'}</p>`
                     }),
                 });
             } catch (emailError) {
